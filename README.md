@@ -10,7 +10,11 @@ select name from t1 where id = 50000;
 ``` sql
 create index ind_t1_id on t1(id);
 ```
+_**Без индекса**_
+
 ![Без индекса](without_index.png)
+
+_**С индексом**_
 
 ![С индексом](with_index.png)
 
