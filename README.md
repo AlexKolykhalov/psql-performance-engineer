@@ -40,4 +40,4 @@ create index idx_t1_id on t1(id);
 create index idx_t2_day on t2(day);
 select t2.day from t2 left join t1 on t2.t_id = t1.id and t1.name like 'a%' order by t2.day desc limit 1;
 ```
-![](/1/with_idx_t1_id.png)
+![](/2/with_idx_t1_id_and_idx_t2_day.png)
