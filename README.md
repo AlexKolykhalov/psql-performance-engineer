@@ -48,15 +48,36 @@ select day from t2 where t_id not in ( select t1.id from t1 );
 ```
 > Проблема
 
-Последование сканирование таблицы t1 и дальнейшее засовывание Materialize View очень сильно замедляет работу запроса,<br>
-плюс последовательная проверка каждого элемента из t2 на условие - тоже не добавляет скорости.
+Последование сканирование таблицы ```t1``` и дальнейшее засовывание ```Materialize View``` очень сильно замедляет работу запроса,<br>
+плюс последовательная проверка каждого элемента из ```t2``` на условие - тоже не добавляет скорости.
 
 ![](/3/before.png)
 
 > Решение
 
- Перестройка запроса помогла уложится в < 10sec
+ Перестройка запроса помогла улучшить план выполнения
 ``` sql
 explain select day from t2 left join t1 on t_id = t1.id where t1.id is null;
 ```
 ![](/3/after.png)
+
+### [4] ускорить запрос "semi-join", добиться времени выполнения < 10sec
+``` sql
+select day from t2 where t_id in ( select t1.id from t1 where t2.t_id = t1.id) and day > to_char(date_trunc('day',now()- '1 months'::interval),'yyyymmdd');
+```
+> Проблема
+
+Поиск подходящего значения для ```day``` происходит медленно, т.к. нет индекса
+
+![](/4/before.png)
+
+> Решение
+
+После создания индекса по ```day``` проверка условия происходит намного быстрее,<br>
+плюс - небольшое изменение запроса помогло улучшить план выполнения
+``` sql
+create index idx_t2_day on t2(day);
+SELECT day FROM t2 LEFT JOIN t1 ON t2.t_id = t1.id WHERE day > to_char(date_trunc('day', now() - '1 months'::interval), 'yyyymmdd');
+```
+![](/4/after.png)
+
