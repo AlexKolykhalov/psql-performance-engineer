@@ -82,8 +82,10 @@ SELECT day FROM t2 LEFT JOIN t1 ON t2.t_id = t1.id WHERE day > to_char(date_trun
 ![](/4/after.png)
 
 ### [5] ускорить работу "savepoint + update", добиться постоянной во времени производительности (число транзакций в секунду)
-``` sql
-
+```
+Virtual Machine
+CPU: Intel Core i7 870 @ 4x 2.926GHz
+RAM: 2759MiB / 6804MiB
 ```
 > Проблема
 
