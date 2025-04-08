@@ -57,7 +57,7 @@ select day from t2 where t_id not in ( select t1.id from t1 );
 
  Перестройка запроса помогла улучшить план выполнения
 ``` sql
-explain select day from t2 left join t1 on t_id = t1.id where t1.id is null;
+select day from t2 left join t1 on t_id = t1.id where t1.id is null;
 ```
 ![](/3/after.png)
 
