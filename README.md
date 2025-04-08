@@ -89,8 +89,28 @@ RAM: 2759MiB / 6804MiB
 ```
 > Проблема
 
-![](/5/before.png)
+При первоначальном запуске pgbench получалась ситуация,<br>
+при которой скорость выполнения операций упиралась в небольшое количество памяти (buffers), доступной для хранения данных.<br>
+Колонки RES и SHR показывают это
+
+![](/5/128MB_htop.png)
+
+Прогресс выполнения
+
+![](/5/128MB_terminal.png)
+
+Результат выполнения pgbench [log-file](/5/128MB_result_pgbench_SV.log/).
 
 > Решение
 
-![](/5/after.png)
+В postgresql.conf увеличил параметр shared_buffers = 1GB
+![](/5/1GB_shared_buffers.png)
+
+В итоге
+![](/5/1GB_htop.png)
+
+Прогресс выполнения
+
+![](/5/1GB_terminal.png)
+
+Результат выполнения pgbench [log-file](/5/1GB_result_pgbench_SV.log/).
